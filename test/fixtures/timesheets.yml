@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2023-06-13
+  start_time: 2023-06-13 14:26:44
+  end_time: 2023-06-13 14:26:44
+  task_id: 1
+  progress_details: MyText
+  action: MyString
+
+two:
+  date: 2023-06-13
+  start_time: 2023-06-13 14:26:44
+  end_time: 2023-06-13 14:26:44
+  task_id: 1
+  progress_details: MyText
+  action: MyString

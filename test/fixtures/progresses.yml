@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  assigned_date: 2023-08-28
+  start_date: 2023-08-28
+  task_manager: MyString
+  exceeded_by: 1
+  delivery_time: 2023-08-28
+
+two:
+  assigned_date: 2023-08-28
+  start_date: 2023-08-28
+  task_manager: MyString
+  exceeded_by: 1
+  delivery_time: 2023-08-28

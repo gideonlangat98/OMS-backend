@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date_from: 2023-06-22
+  date_to: 2023-06-22
+  reason_for_leave: MyText
+  leave_type: MyString
+
+two:
+  date_from: 2023-06-22
+  date_to: 2023-06-22
+  reason_for_leave: MyText
+  leave_type: MyString

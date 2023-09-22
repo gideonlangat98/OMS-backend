@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  staff_id: 1
+  date_from: 2023-06-13
+  date_to: 2023-06-13
+  reason_for_leave: MyText
+  leave_type: MyString
+
+two:
+  staff_id: 1
+  date_from: 2023-06-13
+  date_to: 2023-06-13
+  reason_for_leave: MyText
+  leave_type: MyString
