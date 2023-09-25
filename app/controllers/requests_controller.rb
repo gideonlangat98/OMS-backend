@@ -41,7 +41,7 @@ class RequestsController < ApplicationController
     
         # Only allow a list of trusted parameters through.
         def request_params
-          params.permit(:id, :request_by, :request_detail, :request_date, :request_to, :staff_id)
+          params.permit(:id, :request_by, :task_request, :request_detail, :request_date, :request_to, :staff_id)
         end
   
         def deny_access

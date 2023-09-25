@@ -149,11 +149,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_073146) do
 
   create_table "progresses", force: :cascade do |t|
     t.string "progress_by"
+    t.string "assignment_name"
     t.string "task_managed"
     t.string "project_managed"
     t.date "assigned_date"
     t.date "start_date"
     t.string "exceeded_by"
+    t.string "granted_time"
     t.date "delivery_time"
     t.integer "staff_id"
     t.datetime "created_at", null: false
@@ -173,6 +175,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_073146) do
 
   create_table "requests", force: :cascade do |t|
     t.string "request_by"
+    t.string "task_request"
     t.string "request_detail"
     t.date "request_date"
     t.string "request_to"
@@ -207,6 +210,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_073146) do
 
   create_table "tasks", force: :cascade do |t|
     t.date "assignment_date"
+    t.date "completion_date"
     t.string "task_name"
     t.string "assigned_to"
     t.string "task_manager"

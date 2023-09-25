@@ -221,7 +221,7 @@ end
     private
   
     def task_params
-      params.permit(:id, :avatar_image, :completed_files, :assignment_date, :task_name, :assigned_to, :task_manager, :project_manager, :project_name, :task_deadline, :project_id, :isSeen, :staff_id)
+      params.permit(:id, :avatar_image, :completed_files, :assignment_date, :completion_date, :task_name, :assigned_to, :task_manager, :project_manager, :project_name, :task_deadline, :project_id, :isSeen, :staff_id)
     end
   
     def deny_staff
