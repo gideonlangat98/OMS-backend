@@ -20,9 +20,9 @@ client1 = Client.create(client_name: "Maxxy", description: "Fully functional", m
 
 project1 = Project.create(project_name: "Crypto Application", description: "Full Stack Project", client_details: "Gideon", project_managers: "Langat", task_managers: "Anthony")
 
-task1 = Task.create(assignment_date: Date.today, completion_date: Date.tomorrow, task_name: "Office System", assigned_to: "Kimeu", task_manager: "Omera", project_manager: 'Ida', project_name: "Oms", task_deadline:"Three Weeks", avatar_image: "", completed_files: "", project_id: project1.id, isSeen: false, send_type: "admin", staff_id: staff1.id)
+task1 = Task.create(assignment_date: Date.today, completion_date: Date.tomorrow, task_name: "Office System", assigned_to: "Kimeu", task_manager: "Omera", project_manager: 'Ida', project_name: "Oms", task_deadline:"Three Weeks", avatar_image: "", completed_files: "", project_id: project1.id, isComplete: 'Not Started', send_type: "admin", staff_id: staff1.id)
 
-timesheet1 = Timesheet.create(date: Date.today, start_time: Time.now, end_time: Time.now, task_id: task1.id, task_detail: "Oms", progress_details: "Completed task", time_limit: " Three Weeks", staff_id: staff1.id)
+timesheet1 = Timesheet.create(date: Date.today, start_time: Time.now, end_time: Time.now, task_id: task1.id, task_detail: "Oms", task_stuffs: "Clarification", addressed_issue: "Clarified By", issues_sorted: "Learnt the Overflow of OMS project", issues_discussed: "SFDC", sorted_by: "Gideon - Project Manager", progress_details: "Completed task", time_limit: " Three Weeks", staff_id: staff1.id)
 
 profile1 = Profile.create(bio: "Software Engineer # FullStack Engineer", avatar: "", about:"", location:"", bio_name: "", my_email: "", tech: "", staff_id: staff1.id)
 

@@ -220,7 +220,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_073146) do
     t.string "avatar_image"
     t.string "completed_files"
     t.string "send_type"
-    t.boolean "isSeen", default: false
+    t.string "isComplete", default: "Not Started"
     t.integer "project_id"
     t.integer "staff_id"
     t.datetime "created_at", null: false
@@ -232,6 +232,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_073146) do
     t.time "start_time"
     t.time "end_time"
     t.string "task_detail"
+    t.string "task_stuffs"
+    t.string "addressed_issue"
+    t.string "issues_sorted"
+    t.string "sorted_by"
+    t.string "issues_discussed"
     t.string "progress_details"
     t.string "time_limit"
     t.integer "task_id"

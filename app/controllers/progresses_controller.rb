@@ -1,55 +1,84 @@
 class ProgressesController < ApplicationController
-    before_action :deny_access, only: [:create, :update, :show]
-  
-      # GET /  Managers
-      def index
-       @progress = Progress.all
-        render json: @progress
-      end
-    
-      # GET /  Managers/1
-      def show
-       @progress = set_progress
-        render json: @progress
-      end
-    
-      # POST /  Managers
-      def create
-       @progress =Progress.create(progress_params)
-        render json: @progress, status: :created
-      end
-    
-      # PATCH/PUT /  Managers/1
-      def update
-       @progress = set_progress
-       @progress.update(progress_params)
-        render json: @progress, status: :created
-      end
-    
-      # DELETE /  Managers/1
-      def destroy
-       @progress = set_progress
-       @progress.destroy
-        head :no_content
-      end
-    
-      private
-        # Use callbacks to share common setup or constraints between actions.
-        def set_progress
-         @progress = Progress.find(params[:id])
-        end
-    
-        # Only allow a list of trusted parameters through.
-        def progress_params
-          params.permit(:id, :progress_by, :project_managed, :assignment_name, :granted_time, :task_managed, :assigned_date, :start_date, :exceeded_by, :delivery_time)
-        end
-  
-        def deny_access
-          render_unauthorized unless authenticate_staff
-        end
-      
-        def render_unauthorized
-          render json: { error: 'Unauthorized' }, status: :unauthorized
-        end
+  before_action :authenticate_staff, only: [:show, :create, :update, :destroy]
+  before_action :deny_access, except: [:index, :show, :destroy]
+
+  # GET /progresses
+  def index
+    if current_admin
+      @progresses = Progress.all
+    else
+      @progresses = Progress.where(staff_id: current_staff.id)
+    end
+    render json: @progresses
   end
-  
+
+  # GET /progresses/1
+  def show
+    @progress = set_progress
+    if @progress.staff_id == current_staff.id || current_admin
+      render json: @progress
+    else
+      render json: { error: 'Unauthorized to view this progress' }, status: :unauthorized
+    end
+  end
+
+  # POST /progresses
+  def create
+    @progress = Progress.new(progress_params)
+    @progress.staff_id = current_staff.id
+
+    if @progress.save
+      render json: @progress, status: :created
+    else
+      render json: { error: 'Failed to create the progress' }, status: :unprocessable_entity
+    end
+  end
+
+  # PATCH/PUT /progresses/1
+  def update
+    @progress = set_progress
+    if current_staff && @progress.staff_id == current_staff.id
+      if @progress.update(progress_params)
+        render json: @progress, status: :ok
+      else
+        render json: { error: 'Failed to update the progress' }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'Unauthorized to update this progress' }, status: :unauthorized
+    end
+  end
+
+
+  # DELETE /progresses/1
+  def destroy
+    progress = Progress.find_by(id: params[:id])
+    if progress
+      progress.destroy
+      head :no_content
+    else
+      render json: { error: "Progress not found" }, status: :not_found
+    end
+  end
+
+  private
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_progress
+    @progress = Progress.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def progress_params
+    params.permit(:progress_by, :project_managed, :assignment_name, :granted_time, :task_managed, :assigned_date, :start_date, :exceeded_by, :delivery_time)
+  end
+
+  def deny_access
+    render unauthorized unless authenticate_staff
+  end
+
+  def render_unauthorized
+    render json: { error: 'Unauthorized' }, status: :unauthorized
+  end
+
+
+end

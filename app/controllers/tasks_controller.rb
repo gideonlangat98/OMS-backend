@@ -1,7 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_staff, only: [:index, :show, :update, :create, :upload_completed_files]
-  before_action :deny_staff, only: [:edit, :destroy]
-  before_action :deny_access, only: [ :create, :destroy]
+  before_action :deny_access, only: [:create, :destroy]
   # before_action :authenticate_staff_or_admin, only: [:download_completed_file]
 
     # Add this action to the TasksController
@@ -107,17 +106,26 @@ end
       end
     end
     
-  
     def update
       task = Task.find_by(id: params[:id])
       if task
-        if current_admin || task.staff_id == @current_staff.id
-          # Other update logic...
-    
+        if current_staff && task.assigned_to == current_staff.staff_name
+          # Staff members can update tasks, including the isComplete attribute
           if task.update(task_params)
             render json: task
           else
             render json: { error: task.errors.full_messages }, status: :unprocessable_entity
+          end
+        elsif current_admin
+          # Admins can update tasks, except for the isComplete attribute
+          if task_params[:isComplete].present?
+            render json: { error: "Admins cannot update the 'isComplete' attribute" }, status: :unprocessable_entity
+          else
+            if task.update(task_params.except(:isComplete))
+              render json: task
+            else
+              render json: { error: task.errors.full_messages }, status: :unprocessable_entity
+            end
           end
         else
           render_unauthorized
@@ -125,7 +133,7 @@ end
       else
         render json: { error: "Task not found" }, status: :not_found
       end
-    end
+    end    
   
     # DELETE /tasks/1
     def destroy
@@ -221,7 +229,7 @@ end
     private
   
     def task_params
-      params.permit(:id, :avatar_image, :completed_files, :assignment_date, :completion_date, :task_name, :assigned_to, :task_manager, :project_manager, :project_name, :task_deadline, :project_id, :isSeen, :staff_id)
+      params.permit(:id, :avatar_image, :completed_files, :assignment_date, :completion_date, :task_name, :assigned_to, :task_manager, :project_manager, :project_name, :task_deadline, :project_id, :isComplete, :staff_id)
     end
   
     def deny_staff
@@ -235,6 +243,10 @@ end
     def task_belongs_to_current_staff?
       task = Task.find_by(id: params[:id])
       task && task.staff_id == @current_staff.id
+    end
+
+    def staff_can_update_is_complete?(task)
+      current_staff && task.assigned_to == current_staff.staff_name
     end
   
     def render_unauthorized
