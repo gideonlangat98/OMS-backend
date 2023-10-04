@@ -157,6 +157,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_11_073146) do
     t.string "exceeded_by"
     t.string "granted_time"
     t.date "delivery_time"
+    t.string "progress_sender"
+    t.boolean "seen", default: false
     t.integer "staff_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

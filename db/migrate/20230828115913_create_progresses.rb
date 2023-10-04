@@ -10,6 +10,8 @@ class CreateProgresses < ActiveRecord::Migration[7.0]
       t.string :exceeded_by
       t.string :granted_time
       t.date :delivery_time
+      t.string :progress_sender
+      t.boolean :seen, default: false
       t.integer :staff_id, null: true, foreign_key: true
 
       t.timestamps

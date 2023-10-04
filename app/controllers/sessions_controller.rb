@@ -21,7 +21,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    # Token-based authentication doesn't require session deletion
+
     head :no_content
   end
+  
 end

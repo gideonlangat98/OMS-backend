@@ -43,7 +43,18 @@ Rails.application.routes.draw do
   resources :admins
   resources :profiles
   resources :requests
-  resources :progresses
+
+  resources :progresses do
+    
+    collection do
+      get 'received_progresses', to: 'progresses#received_progresses', as: 'received_progresses' 
+    end
+
+    member do
+      put 'update_seen', to: 'progresses#update_seen', as: 'update_seen_progress'
+    end
+  end
+  
 
   resources :staffs do
     member do

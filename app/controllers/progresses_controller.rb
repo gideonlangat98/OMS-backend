@@ -1,16 +1,19 @@
 class ProgressesController < ApplicationController
-  before_action :authenticate_staff, only: [:show, :create, :update, :destroy]
-  before_action :deny_access, except: [:index, :show, :destroy]
+  before_action :authenticate_staff, only: [:show, :create, :update]
+  before_action :deny_access, only: [:index, :show]
 
   # GET /progresses
-  def index
-    if current_admin
-      @progresses = Progress.all
-    else
-      @progresses = Progress.where(staff_id: current_staff.id)
-    end
-    render json: @progresses
+ # In your ProgressesController
+def index
+  if current_admin
+    @progresses = Progress.all
+  else
+    @progresses = Progress.where(staff_id: current_staff.id)
   end
+
+  render json: @progresses, status: :ok
+end
+
 
   # GET /progresses/1
   def show
@@ -22,9 +25,23 @@ class ProgressesController < ApplicationController
     end
   end
 
+  def received_progresses
+    if current_admin
+      @received_progresses = Progress.where(progress_sender: 'staff')
+      render json: @received_progresses
+    else
+      render json: { error: 'Unauthorized to view received progresses' }, status: :unauthorized
+    end
+  end
+
   # POST /progresses
   def create
     @progress = Progress.new(progress_params)
+
+    if current_staff
+      @progress.progress_sender = 'staff'
+    end
+
     @progress.staff_id = current_staff.id
 
     if @progress.save
@@ -48,11 +65,24 @@ class ProgressesController < ApplicationController
     end
   end
 
+  def update_seen
+    @progress = set_progress
+
+    if current_admin
+      # Update the "seen" status of the progress (you may have a field like 'seen' in your Progress model)
+      @progress.update(seen: true)
+
+      render json: @progress, status: :ok
+    else
+      render json: { error: 'Unauthorized to update the "seen" status of this progress' }, status: :unauthorized
+    end
+  end
+
 
   # DELETE /progresses/1
   def destroy
     progress = Progress.find_by(id: params[:id])
-    if progress
+    if current_admin
       progress.destroy
       head :no_content
     else
@@ -69,7 +99,7 @@ class ProgressesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def progress_params
-    params.permit(:progress_by, :project_managed, :assignment_name, :granted_time, :task_managed, :assigned_date, :start_date, :exceeded_by, :delivery_time)
+    params.permit(:id, :progress_by, :project_managed, :assignment_name, :granted_time, :task_managed, :assigned_date, :start_date, :exceeded_by, :delivery_time)
   end
 
   def deny_access
